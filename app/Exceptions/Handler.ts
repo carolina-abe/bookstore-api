@@ -15,9 +15,22 @@
 
 import Logger from '@ioc:Adonis/Core/Logger'
 import HttpExceptionHandler from '@ioc:Adonis/Core/HttpExceptionHandler'
+import type { HttpContextContract } from 'App/Contracts/Common'
+import ValidationException from './ValidationException'
 
 export default class ExceptionHandler extends HttpExceptionHandler {
   constructor() {
     super(Logger)
+  }
+
+  public async handle(error: any, ctx: HttpContextContract): Promise<void> {
+    if (error instanceof ValidationException) {
+      return error.handle(error, ctx)
+    }
+
+    ctx.response.status(error.status || 500).send({
+      message: error.message || 'Internal Server Error',
+      code: error.code || 'E_INTERNAL_SERVER_ERROR',
+    })
   }
 }
