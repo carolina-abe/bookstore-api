@@ -15,6 +15,7 @@
 
 import Logger from '@ioc:Adonis/Core/Logger'
 import HttpExceptionHandler from '@ioc:Adonis/Core/HttpExceptionHandler'
+import { ValidationException as CoreValidationException } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from 'App/Contracts/Common'
 import ValidationException from './ValidationException'
 
@@ -24,6 +25,9 @@ export default class ExceptionHandler extends HttpExceptionHandler {
   }
 
   public async handle(error: any, ctx: HttpContextContract): Promise<void> {
+    if (error instanceof CoreValidationException) {
+      return error.handle(error, ctx)
+    }
     if (error instanceof ValidationException) {
       return error.handle(error, ctx)
     }
