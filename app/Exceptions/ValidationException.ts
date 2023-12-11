@@ -19,7 +19,7 @@ export default class ValidationException extends Exception {
   constructor(props: ConstructorProps) {
     super(
       props.message || 'Validation Error',
-      props.status || 403,
+      props.status || 422,
       props.code || 'E_VALIDATION_FAILURE'
     )
     this.validationErrors = props.validationErrors || []

@@ -10,10 +10,18 @@ const admins: Partial<User>[] = [
   },
 ]
 
+const clients: Partial<User>[] = [
+  {
+    name: 'Client',
+    email: 'client@example.com',
+    password: 'client',
+  },
+]
+
 export default class extends BaseSeeder {
   public async run() {
     await User.truncate()
     await UserFactory.merge(admins).apply('AdminRole').createMany(5)
-    await UserFactory.createMany(15)
+    await UserFactory.merge(clients).createMany(15)
   }
 }
